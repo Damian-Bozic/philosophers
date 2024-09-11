@@ -19,38 +19,46 @@
 # include <pthread.h>
 # include <string.h>
 
-
-typedef struct s_fork
-{
-	pthread_mutex_t	*mutex;
-	struct s_fork	*next;
-}	t_fork;
-
 typedef struct s_philo
 {
 	pthread_t		thread;
+	pthread_mutex_t	*left_hand;
+	pthread_mutex_t	*right_hand;
 	int				index;
-	struct timeval	*last_meal;
-	struct timeval	*sim_start;
-	t_fork			*left_hand;
-	t_fork			*right_hand;
 	int				meals_eaten;
+	struct s_sim	*sim;
+	struct timeval	*last_meal;
+	struct timeval	*current_time;
 	struct s_philo	*next;
 }	t_philo;
 
-
-// if n_of_philos = 0 then sim stop
 typedef struct s_sim
 {
-	int				n_of_philos;
-	struct timeval	*sim_start;
+	pthread_t		death_tracker;
 	pthread_mutex_t	*death_mutex;
+	t_philo			*philos;
+	int				n_of_philos;
+	int				hungriest_philo;
+	int				has_a_philo_died;
 	int				time_to_die;
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				min_eat_amount;
-	t_philo			*philos;
-	t_fork			*forks;
+	struct timeval	*earliest_meal;
+	struct timeval	*sim_start;
 }	t_sim;
+
+// core functions:
+t_sim	*init_struct(char **argv);
+void	*start_thread(void *sent);
+void	*death_timer_thread_start(void *sent);
+
+// helper functions:
+int		custom_atoi(char *str);
+long	get_time_diff_ms(struct timeval *start, struct timeval *current);
+int		check_if_everyone_has_finished_eating(t_sim *sim);
+void	find_hungriest(t_sim *sim);
+void	*free_all(t_sim *sim);
+void	*free_philos(t_philo *philo_one);
 
 #endif
