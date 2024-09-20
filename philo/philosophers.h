@@ -19,6 +19,7 @@
 # include <pthread.h>
 # include <string.h>
 
+// circular linked list of philos
 typedef struct s_philo
 {
 	pthread_t		thread;
@@ -32,6 +33,7 @@ typedef struct s_philo
 	struct s_philo	*next;
 }	t_philo;
 
+// main structure
 typedef struct s_sim
 {
 	pthread_t		death_tracker;

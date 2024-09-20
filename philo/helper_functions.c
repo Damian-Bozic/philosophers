@@ -12,6 +12,9 @@
 
 #include "philosophers.h"
 
+// custom atoi, changed for handling improper inputs, like input over max int, 
+// negative int, int starting with 0 or non-valid char found in the input.
+
 int	custom_atoi(char *str)
 {
 	int		i;
@@ -39,11 +42,16 @@ int	custom_atoi(char *str)
 	return ((int)rtn);
 }
 
+// get_time_diff_ms returns the time difference between two timevals in ms
+
 long	get_time_diff_ms(struct timeval *start, struct timeval *current)
 {
 	return (((current->tv_sec - start->tv_sec) * 1000)
 		+ ((current->tv_usec - start->tv_usec) / 1000));
 }
+
+// check_if_everyone_has_finished_eating goes through all the philos, and
+// returns 1 if everyone has eaten the required amount of times
 
 int	check_if_everyone_has_finished_eating(t_sim *sim)
 {
@@ -65,6 +73,10 @@ int	check_if_everyone_has_finished_eating(t_sim *sim)
 	}
 	return (flag);
 }
+
+// find_hungriest finds the hungriest philo and sets it as the hungriest
+// on sim->earliest_meal and sim->hungriest philo, which then gets tracked
+// by the death tracker
 
 void	find_hungriest(t_sim *sim)
 {

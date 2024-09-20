@@ -12,6 +12,14 @@
 
 #include "philosophers.h"
 
+// death timer is responsible for setting has_philo_died to 1 when the
+// hungriest philosopher has died of starvation, therefore allowing each 
+// thread to close.
+
+// to avoid data races, the loop utilises a single mutex (death_mutex), that
+// prevents any thread from reading the sim->hungriest_philo while its being
+// written to.
+
 static void	death_timer_loop(t_sim *sim, struct timeval *current)
 {
 	while (1)

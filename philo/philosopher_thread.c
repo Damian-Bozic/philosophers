@@ -12,6 +12,19 @@
 
 #include "philosophers.h"
 
+// throughout all these functions, before a philo prints any action, it first
+// enters the death_mutex lock and checks whether sim->has_a_philo_died is 0,
+// if it is 1 (meaning a philo has died and the simulation is over) it will
+// close the thread.
+
+// in order for all philos to have a chance to eat, good timing is required
+// i have offset even and odd philos so that odd philos eat first, while
+// even philos eat after, this way philos wont end up stuck with one fork,
+// which end up going unused for some time, this often ends in a philo starving
+
+// i recommend https://nafuka11.github.io/philosophers-visualizer/ to visualise
+// how the timing works on odd and even numbers of philosphers
+
 static int	pickup_first_fork(t_philo *philo)
 {
 	if (philo->index % 2 == 0)
@@ -114,6 +127,11 @@ static void	*life_cycle_loop(t_philo *philo)
 	}
 	return (NULL);
 }
+
+// each philosopher has its own thread, meaning that it is running the code
+// independently, this also leads to problems though, as if two threads try
+// to write to a shared variable at the same time, a data race will occur,
+// often causing the variable to be set to something incorrect
 
 void	*start_thread(void *sent)
 {

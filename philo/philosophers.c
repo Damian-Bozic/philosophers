@@ -50,6 +50,8 @@ void	*free_all(t_sim *sim)
 	return (NULL);
 }
 
+// close_sim waits for all of the threads to close, before freeing everything
+
 void	close_sim(t_sim *sim)
 {
 	t_philo			*current;
@@ -66,6 +68,9 @@ void	close_sim(t_sim *sim)
 	}
 	free_all(sim);
 }
+
+// start_sim sets the designated start time for the simulation and
+// creates all of the threads
 
 void	start_sim(t_sim *sim)
 {
